@@ -136,7 +136,7 @@
     const restartButton = document.getElementById('restartButton');
     const finalScoreDisplay = document.getElementById('finalScore');
     let score = 0;
-    let timer = 10;
+    let timer = 30;
     let gameInterval;
 
     const images = [
@@ -182,7 +182,7 @@
 
     function startGame() {
       score = 0;
-      timer = 10;
+      timer = 30;
       updateScore();
       updateTimer();
       gameOverMessage.style.display = 'none';
