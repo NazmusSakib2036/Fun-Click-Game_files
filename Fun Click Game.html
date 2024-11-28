@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Game</title>
+  <link rel="icon" href="image/Fun.png">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: #b5b96f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scoreBoard,
+    #timer {
+      position: absolute;
+      top: 10px;
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+
+    #scoreBoard {
+      left: 10px;
+    }
+
+    #timer {
+      right: 10px;
+    }
+
+    #gameOverMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+      text-align: center;
+    }
+
+    #gameOverMessage p {
+      margin: 10px 0;
+    }
+
+    .ms1 {
+      font-size: 42px;
+    }
+
+    .ms2 {
+      font-size: 25px;
+    }
+
+    #gameOverMessage button {
+      font-size: 20px;
+      border: none;
+      color: black;
+      background-color: #00ff00;
+      border-radius: 10px;
+      padding: 5px 15px;
+      cursor: pointer;
+      font-weight: bold;
+
+      &:hover {
+        background-color: #00cc00;
+        transition: .5s;
+
+      }
+    }
+
+    .target {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .clickEffect {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: url('image/click_effect.png') no-repeat center center / cover;
+      pointer-events: none;
+      animation: fadeOut 0.8s forwards;
+      border-radius: 50%;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="gameArea">
+    <div id="scoreBoard">Score: 0</div>
+    <div id="timer">Time: 60</div>
+    <div id="gameOverMessage">
+      <p class="message ms1">Game Over !</p>
+      <p class="message ms2">Your Score: <span id="finalScore">0</span></p>
+      <button id="restartButton">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreBoard = document.getElementById('scoreBoard');
+    const timerDisplay = document.getElementById('timer');
+    const gameOverMessage = document.getElementById('gameOverMessage');
+    const restartButton = document.getElementById('restartButton');
+    const finalScoreDisplay = document.getElementById('finalScore');
+    let score = 0;
+    let timer = 10;
+    let gameInterval;
+
+    const images = [
+      'image/target1.png',
+      'image/target2.png',
+      'image/target3.png',
+      'image/target4.png',
+      'image/target5.png',
+    ];
+
+    function updateScore() {
+      scoreBoard.textContent = `Score: ${score}`;
+    }
+
+    function updateTimer() {
+      timerDisplay.textContent = `Time: ${timer}`;
+    }
+
+    function createTarget(imageSrc) {
+      const target = document.createElement('img');
+      target.src = imageSrc;
+      target.classList.add('target');
+      gameArea.appendChild(target);
+      return target;
+    }
+
+    function moveTarget(target) {
+      const x = Math.random() * (gameArea.clientWidth - target.clientWidth);
+      const y = Math.random() * (gameArea.clientHeight - target.clientHeight);
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+    }
+
+    function showImageAtClick(x, y) {
+      const clickEffect = document.createElement('div');
+      clickEffect.classList.add('clickEffect');
+      clickEffect.style.left = `${x - 50}px`;
+      clickEffect.style.top = `${y - 50}px`;
+      gameArea.appendChild(clickEffect);
+
+      setTimeout(() => clickEffect.remove(), 800);
+    }
+
+    function startGame() {
+      score = 0;
+      timer = 10;
+      updateScore();
+      updateTimer();
+      gameOverMessage.style.display = 'none';
+
+      images.forEach((imageSrc) => {
+        const target = createTarget(imageSrc);
+        moveTarget(target);
+
+        target.addEventListener('click', (event) => {
+          score++;
+          updateScore();
+
+          const clickSound = new Audio('image/click.mp3');
+          clickSound.currentTime = 0;
+          clickSound.play();
+
+          showImageAtClick(event.clientX, event.clientY);
+          moveTarget(target);
+        });
+
+        setInterval(() => moveTarget(target), 1000);
+      });
+
+      gameInterval = setInterval(() => {
+        timer--;
+        updateTimer();
+        if (timer <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      document.querySelectorAll('.target').forEach((target) => target.remove());
+      finalScoreDisplay.textContent = score; // Update score dynamically
+      gameOverMessage.style.display = 'block';
+    }
+
+    restartButton.addEventListener('click', () => {
+      startGame();
+    });
+
+    startGame();
+
+    // Disable context menu and shortcuts
+    document.addEventListener('contextmenu', (event) => event.preventDefault());
+    document.addEventListener('selectstart', (event) => event.preventDefault());
+    document.addEventListener('dragstart', (event) => event.preventDefault());
+    document.addEventListener('keydown', (event) => {
+      if (
+        (event.ctrlKey && ['u', 's', 'c'].includes(event.key.toLowerCase())) ||
+        (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'i')
+      ) {
+        event.preventDefault();
+      }
+    });
+  </script>
+</body>
+
+</html>
