@@ -85,7 +85,7 @@ body {
     position: absolute;
     width: 100px;
     height: 100px;
-    background: url('image/click_effect.png') no-repeat center center / cover;
+    background: url('/image/click_effect.png') no-repeat center center / cover;
     pointer-events: none;
     animation: fadeOut 0.8s forwards;
     border-radius: 50%;
