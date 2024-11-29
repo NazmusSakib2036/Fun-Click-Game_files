@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+#gameArea {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #b5b96f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#scoreBoard,
+#timer {
+    position: absolute;
+    top: 10px;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+#scoreBoard {
+    left: 10px;
+}
+
+#timer {
+    right: 10px;
+}
+
+#gameOverMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    text-align: center;
+}
+
+#gameOverMessage p {
+    margin: 10px 0;
+}
+
+#gameOverMessage button {
+    font-size: 20px;
+    border: none;
+    color: red;
+    background-color: aqua;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.target {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+    animation: smoothFall 5s linear infinite;
+}
+
+@keyframes smoothFall {
+    0% {
+        transform: translateY(-200px);
+    }
+
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+.clickEffect {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: url('image/click_effect.png') no-repeat center center / cover;
+    pointer-events: none;
+    animation: fadeOut 0.8s forwards;
+    border-radius: 50%;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+}
