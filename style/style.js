@@ -11,13 +11,13 @@
     let fruitInterval;
 
     const images = [
-      '/image/target1.png',
-      '/image/target2.png',
-      '/image/target3.png',
-      '/image/target4.png',
-      '/image/target5.png',
-      '/image/target6.png',
-      '/image/target7.png',
+      'image/target1.png',
+      'image/target2.png',
+      'image/target3.png',
+      'image/target4.png',
+      'image/target5.png',
+      'image/target6.png',
+      'image/target7.png',
     ];
 
     function updateScore() {
